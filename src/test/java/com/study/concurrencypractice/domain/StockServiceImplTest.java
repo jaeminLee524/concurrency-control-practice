@@ -19,14 +19,6 @@ class StockServiceImplTest {
     @Autowired
     private StockRepository stockRepository;
 
-    private final long productID = 1L;
-    private final int quantity = 1;
-
-    @BeforeEach
-    void setUp() {
-        stockRepository.save(Stock.create(productID, 100));
-    }
-
     @AfterEach
     void tearDown() {
         stockRepository.deleteAllInBatch();
@@ -36,15 +28,15 @@ class StockServiceImplTest {
     @Test
     void decreaseStock() {
         // given
+        final long productId = 1L;
+        final int quantity = 1;
+
+        stockRepository.save(Stock.create(productId, 100));
 
         // when
-        stockServiceImpl.decreaseV1(productID, quantity);
+        Stock stock = stockServiceImpl.decreaseV1(productId, quantity);
 
         // then
-        Stock stock = stockServiceImpl.retrieveByProductId(productID);
-
-        final Integer afterQuantity = stock.getQuantity();
-
-        assertThat(afterQuantity).isEqualTo(99L);
+        assertThat(stock.getQuantity()).isEqualTo(99L);
     }
 }

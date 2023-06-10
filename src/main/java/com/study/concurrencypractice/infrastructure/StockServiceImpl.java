@@ -14,9 +14,11 @@ public class StockServiceImpl implements StockService {
 
     @Transactional
     @Override
-    public void decreaseV1(Long productId, Integer quantity) {
-        Stock findStock = stockRepository.findByProductId(productId);
-        findStock.deductQuantity(quantity);
+    public Stock decreaseV1(Long productId, Integer quantity) {
+        Stock stock = stockRepository.findByProductId(productId);
+        stock.deductQuantity(quantity);
+
+        return stock;
     }
 
     @Override
