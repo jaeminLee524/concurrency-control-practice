@@ -8,5 +8,7 @@ public interface StockService {
 
     void decreaseV2(Long productId, Integer quantity);
 
-    void decreaseV3(long productId, int quantity);
+    void decreaseV3(long productId, Integer quantity);
+
+    void decreaseV4(Long productId, Integer quantity);
 }
