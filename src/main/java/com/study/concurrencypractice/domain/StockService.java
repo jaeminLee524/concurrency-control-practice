@@ -7,4 +7,6 @@ public interface StockService {
     Stock retrieveByProductId(Long productId);
 
     void decreaseV2(Long productId, Integer quantity);
+
+    void decreaseV3(long productId, int quantity);
 }

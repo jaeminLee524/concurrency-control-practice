@@ -13,9 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
-@Profile("test")
+@ActiveProfiles("test")
 @SpringBootTest
 class StockServiceImplTest {
 
@@ -102,5 +102,31 @@ class StockServiceImplTest {
         assertThat(stock.getQuantity()).isZero();
     }
 
-    
+    @DisplayName("재고 감소 V3 - 동시에 100개의 요청이 들어왔을 때의 재고 감소 현황")
+    @Test
+    void stock_decreaseV3_concurrency() throws InterruptedException {
+        // given
+        final long productId = 1L;
+        final int quantity = 1;
+        stockRepository.save(Stock.create(productId, 100));
+
+        final int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        final CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+
+        // when
+        IntStream.range(0, 100).forEach(e -> executorService.submit(() -> {
+           try {
+               stockServiceImpl.decreaseV3(productId, quantity);
+           } finally {
+               countDownLatch.countDown();
+           }
+        }));
+
+        countDownLatch.await();
+
+        // then
+        Stock stock = stockRepository.findByProductId(productId);
+        assertThat(stock.getQuantity()).isZero();
+    }
 }

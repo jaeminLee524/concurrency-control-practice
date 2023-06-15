@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StockServiceImpl implements StockService {
 
     private final StockRepository stockRepository;
+    private final StockPessimisticLockRepository stockPessimisticLockRepository;
 
     @Transactional
     @Override
@@ -31,5 +32,12 @@ public class StockServiceImpl implements StockService {
     @Override
     public Stock retrieveByProductId(Long productId) {
         return stockRepository.findByProductId(productId);
+    }
+
+    @Override
+    @Transactional
+    public void decreaseV3(long productId, int quantity) {
+        Stock stock = stockPessimisticLockRepository.findByProductId(productId);
+        stock.deductQuantity(quantity);
     }
 }
