@@ -4,13 +4,14 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/stock-practice
-    username: root
-    password: 1234
+    url:
+    username:
+    password:
 
   jpa:
     hibernate:
       ddl-auto: none
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 ---
 spring:
@@ -25,6 +26,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
   h2:
     console:
@@ -43,6 +45,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
   sql:
     init:
